@@ -2,6 +2,7 @@
   (:require-macros  [cljs.core.async.macros :refer  [go go-loop alt!]])
   (:require
     [solsort.util :refer  [route <ajax log]]
+    [solsort.misc :refer  [<seq<!]]
     [reagent.core :as reagent :refer  []]
     [solsort.misc :refer  [js-seq]]
     [clojure.string :refer [replace split blank?]]
@@ -34,7 +35,18 @@
     [(:tag xml) (:attrs xml) (map xml->sxml (:children xml))]
     xml))
 
-(go
+(defn entry [id]
+  (go 
+     (let [config-xml (<! (<ajax (str id "/config.xml") :result "text"))]
+    [:div id [:small config-xml]])))
+(defn main []
+  (go
   (let 
-    [repos-list (<! (<ajax "assets/repos.lst" :result "text"))]
-    (aset js/document.body "innerHTML" repos-list)))
+    [repos-list (<! (<ajax "assets/repos.lst" :result "text"))
+     repos-list (split repos-list "\n")
+     repos-list (map #(replace % #".*/" "") repos-list)]
+    (into
+      [:div
+       [:h1 "Solsort Apps and Widgets"]]
+      (<! (<seq<! (map entry repos-list))))) ))
+(go (reagent/render-component (<! (main)) js/document.body))  

@@ -9,7 +9,9 @@ do
   else
     git clone git@github.com:$REPOS || git clone https://github.com/$REPOS".git" < /dev/zero
   fi
+  ln -sf ../../$DIR resources/public
   echo /$DIR/ >> .gitignore
+  echo /resources/public/$DIR >> .gitignore
   cat .gitignore | sort | uniq > .gitignore.new
   mv .gitignore.new .gitignore
 done

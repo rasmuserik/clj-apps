@@ -13,3 +13,7 @@ lein clean
 lein cljsbuild once dist 
 cordova prepare
 cordova build
+
+# copy cordova-web
+cp -a platforms/browser/www/cordova* .
+cp -a platforms/browser/www/cordova* resources/public/
