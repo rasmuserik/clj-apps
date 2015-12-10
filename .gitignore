@@ -12,6 +12,7 @@ cordova_plugins.js
 /frie-sange/
 /lemon/
 /morse-code/
+/notescore/
 /planetcute/
 /platforms/
 /plugins/
@@ -26,6 +27,7 @@ cordova_plugins.js
 /resources/public/index.js
 /resources/public/lemon
 /resources/public/morse-code
+/resources/public/notescore
 /resources/public/out/
 /resources/public/planetcute
 /resources/public/single-touch-snake
