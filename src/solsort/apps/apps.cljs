@@ -35,10 +35,50 @@
     [(:tag xml) (:attrs xml) (map xml->sxml (:children xml))]
     xml))
 
+(defn conf-id [o]
+  (if (= :preference (:tag o))
+    (:name (:attrs o))
+    (:tag o)))
+
 (defn entry [id]
   (go 
-     (let [config-xml (<! (<ajax (str id "/config.xml") :result "text"))]
-    [:div id [:small config-xml]])))
+     (let [config-xml (<! (<ajax (str id "/config.xml") :result "text"))
+           config-dom (.parseFromString  (js/DOMParser.) config-xml "application/xml")
+           config (dom->clj config-dom)
+           widget (first (:children config))   
+           name (:id (:attrs widget))
+           version (:version (:attrs widget))
+           config-elems (into {} (map (fn [e] [(conf-id e) e]) (:children widget)))
+           title (first (:children (:name config-elems)))  
+           description (first (:children (:description config-elems)))  
+           icon (str id "/"  (:src (:attrs (:icon config-elems))))
+           orientation (:value (:attrs (get config-elems "orientation")))
+           path ()
+           ]
+    [:a
+     {:href (str id "/index.html")
+      :style
+      {:text-color :black
+       :display :block
+       :text-decoration :none
+       :max-width 800
+       :vertical-align :top
+       :margin :auto
+       }
+      }
+     [:img {:src icon :width 100 :height 100 :style {:float :left :margin 10}}]
+     [:h1 title]
+     (into [:div]
+           (interpose [:br] (split description "\n"))
+           )
+     [:br]
+     [:div [:small [:div [:span name] " " [:span version]]]]
+     [:div "orientation: " (str orientation)]
+     [:br]
+     ;[:pre [:small config-xml]]
+     [:hr {:style {:clear :both}}]
+     ])))
+
 (defn main []
   (go
   (let 
@@ -50,3 +90,5 @@
        [:h1 "Solsort Apps and Widgets"]]
       (<! (<seq<! (map entry repos-list))))) ))
 (go (reagent/render-component (<! (main)) js/document.body))  
+
+(log (interpose "foo" [1 2 3]))
