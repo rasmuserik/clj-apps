@@ -72,9 +72,9 @@
            (interpose [:br] (split description "\n"))
            )
      [:br]
-     [:div [:small [:div [:span name] " " [:span version]]]]
-     [:div "orientation: " (str orientation)]
-     [:br]
+     ;[:div [:small [:div [:span name] " " [:span version]]]]
+     ;[:div "orientation: " (str orientation)]
+     ;[:br]
      ;[:pre [:small config-xml]]
      [:hr {:style {:clear :both}}]
      ])))
