@@ -1,7 +1,7 @@
 CACHE MANIFEST
-# Tue Dec 15 15:17:12 CET 2015
-assets/icon.png
+# Tue Dec 15 17:19:44 CET 2015
 assets/repos.lst
+assets/icon.png
 index.html
 index.js
 360-viewer/config.xml
@@ -12,10 +12,12 @@ bibapp-cordova/config.xml
 blobshot/config.xml
 dkcities/config.xml
 frie-sange/config.xml
+kbh-parking/config.xml
 lemon/config.xml
 morse-code/config.xml
 notescore/config.xml
 planetcute/config.xml
 single-touch-snake/config.xml
 sketch-note-draw/config.xml
+timelog/config.xml
 visualisering-af-relationer/config.xml

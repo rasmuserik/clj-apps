@@ -10,6 +10,7 @@ cordova_plugins.js
 /dkcities/
 /figwheel_server.log
 /frie-sange/
+/kbh-parking/
 /lemon/
 /morse-code/
 /notescore/
@@ -25,6 +26,7 @@ cordova_plugins.js
 /resources/public/dkcities
 /resources/public/frie-sange
 /resources/public/index.js
+/resources/public/kbh-parking
 /resources/public/lemon
 /resources/public/morse-code
 /resources/public/notescore
@@ -32,8 +34,10 @@ cordova_plugins.js
 /resources/public/planetcute
 /resources/public/single-touch-snake
 /resources/public/sketch-note-draw
+/resources/public/timelog
 /resources/public/visualisering-af-relationer
 /single-touch-snake/
 /sketch-note-draw/
 /target/
+/timelog/
 /visualisering-af-relationer/
