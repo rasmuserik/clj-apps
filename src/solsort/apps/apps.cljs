@@ -87,7 +87,7 @@
      repos-list (map #(replace % #".*/" "") repos-list)]
     (into
       [:div
-       [:h1 "Solsort Apps and Widgets"]]
+       [:h1 {:style {:text-align :center}} "Solsort Apps and Widgets"]]
       (<! (<seq<! (map entry repos-list))))) ))
 (go (reagent/render-component (<! (main)) js/document.body))  
 
