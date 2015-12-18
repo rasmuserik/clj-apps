@@ -50,6 +50,7 @@
            version (:version (:attrs widget))
            config-elems (into {} (map (fn [e] [(conf-id e) e]) (:children widget)))
            title (first (:children (:name config-elems)))  
+           date (first (:children (:date config-elems)))  
            description (first (:children (:description config-elems)))  
            icon (str id "/"  (:src (:attrs (:icon config-elems))))
            orientation (:value (:attrs (get config-elems "orientation")))
@@ -67,7 +68,7 @@
        }
       }
      [:img {:src icon :width 100 :height 100 :style {:float :left :margin 10}}]
-     [:h1 title]
+     [:h1 title " " [:small " (" date ")"]]
      (into [:div]
            (interpose [:br] (split description "\n"))
            )

@@ -1,8 +1,7 @@
 CACHE MANIFEST
-# Tue Dec 15 17:37:27 CET 2015
-assets/icon.png
+# Thu Dec 17 22:33:40 CET 2015
 assets/repos.lst
-index.html
+assets/icon.png
 index.js
 360-viewer/config.xml
 apps/config.xml
