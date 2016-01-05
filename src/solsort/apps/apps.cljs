@@ -80,6 +80,23 @@
      [:hr {:style {:clear :both}}]
      ])))
 
+(defn info []
+  [:div
+   [:h1 "solsort.com ApS"]
+   [:ul
+    [:li "Effektivt samarbejde - Vi afklarer løsningen sammen. Da jeg selv implementerer den, er der ingen ekstra mellemtrin."]
+    [:li "Hurtig udviklingstakt - Det foregår typisk med koncentrerede 3-dages "
+     [:a {:href "https://en.wikipedia.org/wiki/Scrum_%28development%29#Workflow"} "sprints"]
+     ". Et sprint er et afgrænset tidsrum fra planlægning til kørende løsning. Ofte mandag-onsdag eller fredag-søndag. De bedste metoder fra "
+     [:a {:href "https://en.wikipedia.org/wiki/Agile_software_development"} "agil udvikling"]
+     ]
+    [:li "Speciale: HTML5-løsninger, der kan bruges i websites og som mobil-app."]
+    [:li "Open Source: du er ikke bundet til én leverandør, og kan gøre med løsningen hvad du vil."]
+    [:li "Tilfredshedsgaranti - jeg véd, at jeg leverer. Hvis du ikke er fuldt tilfreds ved sprint-afslutning, er der fuld returret."]]
+   [:h2 "Kontakt mig hvis du har et interessant projekt eller behov for softwareudvikling."]
+   ]
+  
+  )
 (defn main []
   (go
   (let 
@@ -87,8 +104,7 @@
      repos-list (split repos-list "\n")
      repos-list (map #(replace % #".*/" "") repos-list)]
     (into
-      [:div
-       [:h1 {:style {:text-align :center}} "Solsort Apps and Widgets"]]
+      (info)
       (<! (<seq<! (map entry repos-list))))) ))
 (go (reagent/render-component (<! (main)) js/document.body))  
 
