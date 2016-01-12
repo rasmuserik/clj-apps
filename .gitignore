@@ -15,6 +15,7 @@ cordova_plugins.js
 /kbh-parking/
 /lemon/
 /morse-code/
+/mubackend/
 /notescore/
 /planetcute/
 /platforms/
@@ -32,6 +33,7 @@ cordova_plugins.js
 /resources/public/kbh-parking
 /resources/public/lemon
 /resources/public/morse-code
+/resources/public/mubackend
 /resources/public/notescore
 /resources/public/out/
 /resources/public/planetcute

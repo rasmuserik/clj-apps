@@ -1,11 +1,13 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="solsort.apps.apps" version="0.0.1" 
   xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>Solsort Apps</name>
+    <name>App-list</name>
     <date>2015-12</date>
-    <description>App/widgets listing</description>
+    <description>App/widgets/... listing</description>
     <description>
       Listing of apps, widgets and prototypes by solsort.com. 
+
+      This become the actual solsort.com website.
     
       It reads/parses the `config.xml`s from the apps, and generate the listing from these.
     </description>
