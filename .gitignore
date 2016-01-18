@@ -3,7 +3,7 @@
 /app-tsartnoc/
 /art-quiz/
 /bibapp
-/bibapp-cordova/
+/bibapp/
 /blobshot/
 cordova.js
 cordova-js-src/
@@ -24,7 +24,7 @@ cordova_plugins.js
 /resources/public/apps
 /resources/public/app-tsartnoc
 /resources/public/art-quiz
-/resources/public/bibapp-cordova
+/resources/public/bibapp
 /resources/public/blobshot
 /resources/public/dkcities
 /resources/public/frie-sange

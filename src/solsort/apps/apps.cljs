@@ -1,13 +1,12 @@
 (ns solsort.apps.apps
   (:require-macros  [cljs.core.async.macros :refer  [go go-loop alt!]])
   (:require
-    [solsort.util :refer  [route <ajax log]]
-    [solsort.misc :refer  [<seq<!]]
+    [solsort.util :refer  [<ajax <seq<! js-seq]]
     [reagent.core :as reagent :refer  []]
-    [solsort.misc :refer  [js-seq]]
     [clojure.string :refer [replace split blank?]]
     [cljs.core.async :refer  [>! <! chan put! take! timeout close! pipe]]))
 
+(defn log [& args] (apply js/console.log (map clj->js args)))
 (defn name->kw [o] (keyword (str (.-nodeName o))))
 (defn dom->clj [dom]
   (case (.-nodeType dom)
@@ -42,7 +41,7 @@
 
 (defn entry [id]
   (go 
-     (let [config-xml (<! (<ajax (str id "/config.xml") :result "text"))
+     (let [config-xml (<! (<ajax (str "/" id "/config.xml") :result "text"))
            config-dom (.parseFromString  (js/DOMParser.) config-xml "application/xml")
            config (dom->clj config-dom)
            widget (first (:children config))   
@@ -54,8 +53,7 @@
            description (first (:children (:description config-elems)))  
            icon (str id "/"  (:src (:attrs (:icon config-elems))))
            orientation (:value (:attrs (get config-elems "orientation")))
-           path ()
-           ]
+           path ()]
     [:a
      {:href (str id "/index.html")
       :style
@@ -81,7 +79,7 @@
      ])))
 
 (defn info []
-  [:div
+  #_[:div
    [:h1 "solsort.com ApS"]
    [:ul
     [:li "Effektivt samarbejde - Vi afklarer løsningen sammen. Da jeg selv implementerer den, er der ingen ekstra mellemtrin."]
@@ -94,6 +92,10 @@
     [:li "Open Source: du er ikke bundet til én leverandør, og kan gøre med løsningen hvad du vil."]
     [:li "Tilfredshedsgaranti - jeg véd, at jeg leverer. Hvis du ikke er fuldt tilfreds ved sprint-afslutning, er der fuld returret."]]
    [:h2 "Kontakt mig hvis du har et interessant projekt eller behov for softwareudvikling."]
+   ]
+  [:div
+   [:h1 "App-list:"]
+   
    ]
   
   )
