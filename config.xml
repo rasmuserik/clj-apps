@@ -11,7 +11,7 @@
     </description>
     <author email="app@solsort.com" href="http://solsort.com">solsort.com</author>
     <content src="index.html" />
-    <icon src="assets/solsort.svg" />
+    <icon src="icon.png" />
     <!--splash src="www/assets/splash.png" /-->
 
     <plugin name="cordova-plugin-whitelist" spec="1" />
