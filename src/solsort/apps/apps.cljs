@@ -5,8 +5,11 @@
     [reagent.core :as reagent :refer  []]
     [clojure.string :as string :refer [replace split blank?]]
     [cljs.core.async :refer  [>! <! chan put! take! timeout close! pipe]]))
-;; # Application state
 ;; # Utility functions
+(def months
+  (string/split
+    " January February March April May June July August September October November December"
+    #" "))
 (defn log  [& args]
   (js/console.log  (clj->js args))
   (first args))
@@ -37,6 +40,62 @@
     [(:tag xml) (:attrs xml) (map xml->sxml (:children xml))]
     xml))
 
+;; # Application state
+(defonce db 
+  (reagent/atom 
+    {:entries []
+     }))
+
+;; # defn db-changes
+(defn update-entry [o]
+  (swap! db assoc :entries 
+         (map
+           (fn [entry] (if (= (:id entry) (:id o)) o entry))
+           (:entries @db))))
+;; # Initialisation
+(defn conf-id [o]
+  (if (= :preference (:tag o))
+    (:name (:attrs o))
+    (:tag o)))
+
+(go
+  (let 
+    [entries(<! (<ajax "assets/repos.lst" :result "text"))
+     entries (split entries "\n")
+     entries (map 
+               (fn [repo]
+                 (let [id (replace repo #".*/" "")]
+                   {:id id
+                    :title id
+                    :github repo}))
+               entries)]
+    (swap! db assoc :entries entries)
+    (doall (for [entry entries]
+             (go
+               (let [id (:id entry)
+                     config-xml (<! (<ajax (str "/" id "/config.xml") :result "text"))
+                     config-dom (.parseFromString  (js/DOMParser.) config-xml "application/xml")
+                     config (dom->clj config-dom)
+                     widget (first (:children config))   
+                     config-elems (into {} (map (fn [e] [(conf-id e) e]) (:children widget)))
+                     ]
+
+                 (update-entry
+                   (into entry
+                         {:title (first (:children (:name config-elems)))   
+                          :date (first (:children (:date config-elems)))   
+                          :name (:id (:attrs widget))
+                          :version (:version (:attrs widget))
+                          :orientation (:value (:attrs (get config-elems "orientation"))) 
+                          :icon (str id "/"  (:src (:attrs (:icon config-elems))))
+                          :description (first (:children (:description config-elems)))  
+                          :shortdescription (first (:children (:shortdescription config-elems)))   })
+                   )
+                 ;(log entry title)
+                 )
+               )))
+    (log @db)
+    ))
 ;; # Styling
 (load-style! normalize-css "style-reset")
 (def entry-size 66)
@@ -70,17 +129,9 @@
   "basic-style"
   )
 ;; #
-(defn conf-id [o]
-  (if (= :preference (:tag o))
-    (:name (:attrs o))
-    (:tag o)))
 
-(def months
-  (string/split
-  " January February March April May June July August September October November December"
-  #" "))
-(log months)
-(defn entry [id]
+
+(defn xx-entry [id]
   (go 
     (let [config-xml (<! (<ajax (str "/" id "/config.xml") :result "text"))
           config-dom (.parseFromString  (js/DOMParser.) config-xml "application/xml")
@@ -115,7 +166,36 @@
        repos-list (map #(replace % #".*/" "") repos-list)]
       (into
         (info)
-        (<! (<seq<! (map entry repos-list))))) ))
+        (<! (<seq<! (map xx-entry repos-list))))) ))
 
-(go (reagent/render-component (<! (main)) js/document.body))  
+(defn entry [o]
+  (let [date (or (:date o) "    -00")]
+    [:div.solsort-entry {:title (:shortdescription o)}
+     [:img.icon {:src (str (:id o) "/icon.png")}]
+     [:div.date.nobr
+      (nth months (js/parseInt (.slice date 5 7) 10))
+      " " (.slice date 0 4) ]
+     [:div.text (:title o)]])   
+
+  )
+
+(defn icons []
+  (into [:div
+         [:h2 "Rasmus Erik \u00a0 Voel Jensen" ]
+         [:h1 "solsort.com"]
+         [:div "HTML5 web/apps"]
+         [:div
+          [:span "Blog"] " "
+          [:span "GitHub"] " "
+          [:span "LinkedIn"] " "
+          [:span "info@solsort.com"] " "
+          [:span "+45 60703081"] " "]
+         [:br]
+         [:hr]]
+        ; TODO: should be :entries subscription instead of db
+        (map entry (:entries @db))
+        )
+  )
+;(go (reagent/render-component (<! (main)) js/document.body))  
+(go (reagent/render-component [icons] js/document.body))  
 
