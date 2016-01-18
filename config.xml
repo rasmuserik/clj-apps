@@ -1,19 +1,17 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="solsort.apps.apps" version="0.0.1" 
   xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>App-list</name>
-    <date>2015-12</date>
-    <description>App/widgets/... listing</description>
+    <name>solsort.com apps</name>
+    <date>2016-01</date>
+    <description>solsort.com landing page with app listing</description>
     <description>
       Listing of apps, widgets and prototypes by solsort.com. 
 
-      This become the actual solsort.com website.
-    
       It reads/parses the `config.xml`s from the apps, and generate the listing from these.
     </description>
     <author email="app@solsort.com" href="http://solsort.com">solsort.com</author>
     <content src="index.html" />
-    <icon src="assets/icon.png" />
+    <icon src="assets/solsort.svg" />
     <!--splash src="www/assets/splash.png" /-->
 
     <plugin name="cordova-plugin-whitelist" spec="1" />

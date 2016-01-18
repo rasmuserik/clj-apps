@@ -1,4 +1,5 @@
 /360-viewer/
+/app-list/
 /apps/
 /app-tsartnoc/
 /art-quiz/
@@ -21,6 +22,7 @@ cordova_plugins.js
 /platforms/
 /plugins/
 /resources/public/360-viewer
+/resources/public/app-list
 /resources/public/apps
 /resources/public/app-tsartnoc
 /resources/public/art-quiz
