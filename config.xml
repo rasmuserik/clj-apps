@@ -3,7 +3,7 @@
   xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>solsort.com apps</name>
     <date>2016-01</date>
-    <description>solsort.com landing page with app listing</description>
+    <shortdescription>solsort.com landing page with app listing</shortdescription>
     <description>
       Listing of apps, widgets and prototypes by solsort.com. 
 
