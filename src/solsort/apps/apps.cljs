@@ -1,7 +1,7 @@
 (ns solsort.apps.apps
   (:require-macros  [cljs.core.async.macros :refer  [go go-loop alt!]])
   (:require
-    [solsort.util :refer  [<ajax <seq<! js-seq normalize-css load-style!]]
+    [solsort.util :refer  [<ajax <seq<! js-seq normalize-css load-style! put!close! parse-json-or-nil]]
     [reagent.core :as reagent :refer  []]
     [clojure.string :as string :refer [replace split blank?]]
     [cljs.core.async :refer  [>! <! chan put! take! timeout close! pipe]]))
@@ -44,6 +44,7 @@
 (defonce db 
   (reagent/atom 
     {:entries []
+     :posts []
      }))
 
 ;; # defn db-changes
@@ -53,6 +54,27 @@
            (fn [entry] (if (= (:id entry) (:id o)) o entry))
            (:entries @db))))
 ;; # Initialisation
+;; ## Blog posts
+(defn <simple-xhr [url]
+  (let [c (chan)
+        xhr (js/XMLHttpRequest.)]
+    (aset xhr "onreadystatechange" 
+          (fn [a]
+            (when (= 4 (aget xhr "readyState"))
+              (put!close! c (aget xhr "responseText")))))
+    (.open xhr "GET" url)
+    (.send xhr)
+    c))
+(go
+  (swap! db assoc :posts [])
+  (loop [i 1]
+    (let 
+      [posts (<! (<simple-xhr (str "https://blog.solsort.com/wp-json/wp/v2/posts?page=" i)))
+       posts (parse-json-or-nil posts)]
+      (when (< 0 (.-length posts))
+        (swap! db assoc :posts (into (:posts @db) posts))
+        (recur (inc i))))))
+;; ## App listing
 (defn conf-id [o]
   (if (= :preference (:tag o))
     (:name (:attrs o))
@@ -94,7 +116,6 @@
                  ;(log entry title)
                  )
                )))
-    (log @db)
     ))
 ;; # Styling
 (load-style! normalize-css "style-reset")
@@ -108,14 +129,37 @@
    {:position :relative
     :display :inline-block
     :width entry-size
+    :height 120
     :box-sizing :border-box
-    :margin (/ box-margin 2)
+    :margin-left (/ box-margin 2)
+    :margin-right (/ box-margin 2)
     :vertical-align :top
     :text-align :center
     :font-size (* entry-size 0.15)
     :font-weight :bold
     }
-   ".solsort-entry .date"
+   ".apps" 
+   {:display "inline-block"
+    :vertical-align :top
+    :text-align :center
+    :width "33%" 
+    }
+   ".blog" 
+   {:display "inline-block"
+    :vertical-align :top
+    :text-align :center
+    :width "66%" 
+    }
+   ".blog .post"
+   {:display "inline-block"
+    :text-align :left
+    :vertical-align :top
+    :font-size 12
+    :width 160
+    :height 40
+    :overflow "hidden"
+    }
+   ".date"
    {:opacity "0.4"
     :font-size "80%"
     :font-weight :normal}
@@ -168,34 +212,48 @@
         (info)
         (<! (<seq<! (map xx-entry repos-list))))) ))
 
+(defn render-date [date]
+ [:div.date.nobr
+      (nth months (js/parseInt (.slice date 5 7) 10))
+      " " (.slice date 0 4) ]
+  
+  )
 (defn entry [o]
   (let [date (or (:date o) "    -00")]
     [:div.solsort-entry {:title (:shortdescription o)}
      [:img.icon {:src (str (:id o) "/icon.png")}]
-     [:div.date.nobr
-      (nth months (js/parseInt (.slice date 5 7) 10))
-      " " (.slice date 0 4) ]
-     [:div.text (:title o)]])   
+     (render-date date)
+     [:div.text (:title o)]]))
 
-  )
+(defn post [o]
+  (let [title  (aget (aget o "title") "rendered")
+        date (aget o "date")]
+  [:div.post 
+   (render-date date)
+   [:div.text title]]))
 
-(defn icons []
-  (into [:div
-         [:h2 "Rasmus Erik \u00a0 Voel Jensen" ]
-         [:h1 "solsort.com"]
-         [:div "HTML5 web/apps"]
-         [:div
-          [:span "Blog"] " "
-          [:span "GitHub"] " "
-          [:span "LinkedIn"] " "
-          [:span "info@solsort.com"] " "
-          [:span "+45 60703081"] " "]
-         [:br]
-         [:hr]]
-        ; TODO: should be :entries subscription instead of db
-        (map entry (:entries @db))
-        )
+(defn content []
+  (log (first (:posts @db)))
+  [:div
+   [:h2 "Rasmus Erik \u00a0 Voel Jensen" ]
+   [:h1 "solsort.com"]
+   [:div "HTML5 web/apps"]
+   [:div
+    [:span "Blog"] " "
+    [:span "GitHub"] " "
+    [:span "LinkedIn"] " "
+    [:span "info@solsort.com"] " "
+    [:span "+45 60703081"] " "]
+   [:br]
+   [:hr] 
+   ; TODO: should be :entries,:posts subscription instead of db
+   [:div.apps
+    (into [:div ] (map entry (:entries @db)))]
+   [:div.blog
+    (into [:div ] (map post (:posts @db))) ]
+   
+   ]
   )
 ;(go (reagent/render-component (<! (main)) js/document.body))  
-(go (reagent/render-component [icons] js/document.body))  
+(go (reagent/render-component [content] js/document.body))  
 
