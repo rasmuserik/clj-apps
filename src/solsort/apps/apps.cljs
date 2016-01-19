@@ -121,14 +121,17 @@
 (load-style! normalize-css "style-reset")
 (def entry-size 66)
 (def box-margin 14)
+(def font-size 11)
+(def weight :normal)
 (load-style! 
   {:body
    {:background :white
     :font-family :sans-serif}
    :.info 
    {:text-align :center
-    :margin "40px 0 80px 0"
-    }
+    :margin "60px 0 60px 0" }
+   "h1"
+   {:font-weight :normal}
    :a 
    {:text-decoration :none
     :color "#00a"
@@ -143,8 +146,8 @@
     :margin-right box-margin
     :vertical-align :top
     :text-align :center
-    :font-size (* entry-size 0.15)
-    :font-weight :bold
+    :font-size font-size
+    :font-weight weight
     }
    ".apps" 
    {:display "inline-block"
@@ -165,10 +168,12 @@
    {:display "inline-block"
     :text-align :left
     :vertical-align :top
-    :font-size 12
+    :font-size font-size
+    ;:font-size 12
+    :font-weight weight
     :width (- 160 box-margin)
     :margin-left box-margin
-    :height 40
+    :padding-bottom (* 0.5 box-margin)
     :overflow "hidden"
     }
    ".date"
@@ -188,10 +193,10 @@
 
 
 (defn render-date [date]
- [:div.date.nobr
-      (nth months (js/parseInt (.slice date 5 7) 10))
-      " " (.slice date 0 4) ]
-  
+  [:div.date.nobr
+   (nth months (js/parseInt (.slice date 5 7) 10))
+   " " (.slice date 0 4) ]
+
   )
 (defn entry [o]
   (let [date (or (:date o) "    -00")]
@@ -207,33 +212,31 @@
   (let [title  (aget (aget o "title") "rendered")
         date (aget o "date")
         link (aget o "link")] 
-  [:a.post {:href link}
-   (render-date date)
-   [:div.text title]]))
+    [:a.post {:href link}
+     (render-date date)
+     [:div.text title]]))
 
 (defn content []
   (log @db)
   [:div
    [:div.info
-    [:h2 "Rasmus Erik Voel Jensen" ]
-   [:h1 "solsort.com ApS"]
-   [:div [:strong "HTML5 web/widgets/apps"]]
-   [:div "Writing code, creating things, solving problems"]
-   [:div
-    [:span "+45 60703081"] " " 
-    [:a {:href "mailto:hi@solsort.com?Subject=Hi"} "hi@solsort.com"] " "
-    
-    ]
-   [:div
-    [:a {:href "https://github.com/rasmuserik"} "GitHub"] " "
-    [:a {:href "https://linkedin.com/in/rasmuserik"} "LinkedIn"] " "
-    ]]
+    [:h2 "Rasmus\u00a0Erik Voel\u00a0Jensen" ]
+    [:h1 "solsort.com ApS"]
+    [:div [:strong "HTML5 web/widgets/apps"]]
+    ;[:div "Writing code, creating things, solving problems"]
+    [:div
+     [:span "+45\u00a060703081"] " \u00a0 " 
+     [:a {:href "mailto:hi@solsort.com?Subject=Hi"} "hi@solsort.com"] " "]
+    [:div
+     [:a {:href "https://github.com/rasmuserik"} "GitHub"] " \u00A0 "
+     [:a {:href "https://linkedin.com/in/rasmuserik"} "LinkedIn"] " "]]
+   [:hr]
    ; TODO: should be :entries,:posts subscription instead of db
    [:div.apps
     (into [:div ] (map entry (:entries @db)))]
    [:div.blog
     (into [:div ] (map post (:posts @db))) ]
-   
+
    ]
   )
 
