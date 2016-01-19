@@ -125,14 +125,22 @@
   {:body
    {:background :white
     :font-family :sans-serif}
+   :.info 
+   {:text-align :center
+    :margin "40px 0 80px 0"
+    }
+   :a 
+   {:text-decoration :none
+    :color "#00a"
+    }
    :.solsort-entry
    {:position :relative
     :display :inline-block
     :width entry-size
     :height 120
     :box-sizing :border-box
-    :margin-left (/ box-margin 2)
-    :margin-right (/ box-margin 2)
+    :margin-left 0
+    :margin-right box-margin
     :vertical-align :top
     :text-align :center
     :font-size (* entry-size 0.15)
@@ -141,21 +149,25 @@
    ".apps" 
    {:display "inline-block"
     :vertical-align :top
-    :text-align :center
-    :width "33%" 
+    :box-sizing :border-box
+    :border-right "1px solid #eee"
+    :text-align :right
+    :width "38%" 
     }
    ".blog" 
    {:display "inline-block"
     :vertical-align :top
-    :text-align :center
-    :width "66%" 
+    :box-sizing :border-box
+    :text-align :left
+    :width "61%" 
     }
    ".blog .post"
    {:display "inline-block"
     :text-align :left
     :vertical-align :top
     :font-size 12
-    :width 160
+    :width (- 160 box-margin)
+    :margin-left box-margin
     :height 40
     :overflow "hidden"
     }
@@ -175,43 +187,6 @@
 ;; #
 
 
-(defn xx-entry [id]
-  (go 
-    (let [config-xml (<! (<ajax (str "/" id "/config.xml") :result "text"))
-          config-dom (.parseFromString  (js/DOMParser.) config-xml "application/xml")
-          config (dom->clj config-dom)
-          widget (first (:children config))   
-          name (:id (:attrs widget))
-          version (:version (:attrs widget))
-          config-elems (into {} (map (fn [e] [(conf-id e) e]) (:children widget)))
-          title (first (:children (:name config-elems)))  
-          date (first (:children (:date config-elems)))  
-          description (first (:children (:description config-elems)))  
-          shortdescription (first (:children (:shortdescription config-elems)))  
-          icon (str id "/"  (:src (:attrs (:icon config-elems))))
-          orientation (:value (:attrs (get config-elems "orientation")))
-          path ()]
-      [:div.solsort-entry {:title shortdescription}
-       [:img.icon {:src icon}]
-       [:div.date.nobr
-        (nth months (js/parseInt (.slice date 5) 10))
-        " " (.slice date 0 4) ]
-       [:div.text title]])))
-
-(defn info []
-  [:div
-   [:h1 "App-list:"]])
-
-(defn main []
-  (go
-    (let 
-      [repos-list (<! (<ajax "assets/repos.lst" :result "text"))
-       repos-list (split repos-list "\n")
-       repos-list (map #(replace % #".*/" "") repos-list)]
-      (into
-        (info)
-        (<! (<seq<! (map xx-entry repos-list))))) ))
-
 (defn render-date [date]
  [:div.date.nobr
       (nth months (js/parseInt (.slice date 5 7) 10))
@@ -220,32 +195,38 @@
   )
 (defn entry [o]
   (let [date (or (:date o) "    -00")]
-    [:div.solsort-entry {:title (:shortdescription o)}
+    [:a.solsort-entry {
+                       ;:href (str "#app:" (:id o))
+                       :href (str "/" (:id o))
+                       :title (:shortdescription o)}
      [:img.icon {:src (str (:id o) "/icon.png")}]
      (render-date date)
      [:div.text (:title o)]]))
 
 (defn post [o]
   (let [title  (aget (aget o "title") "rendered")
-        date (aget o "date")]
-  [:div.post 
+        date (aget o "date")
+        link (aget o "link")] 
+  [:a.post {:href link}
    (render-date date)
    [:div.text title]]))
 
 (defn content []
-  (log (first (:posts @db)))
+  (log @db)
   [:div
-   [:h2 "Rasmus Erik \u00a0 Voel Jensen" ]
-   [:h1 "solsort.com"]
-   [:div "HTML5 web/apps"]
+   [:div.info
+    [:h2 "Rasmus Erik Voel Jensen" ]
+   [:h1 "solsort.com ApS"]
+   [:div "HTML5 web/widgets/apps"]
    [:div
-    [:span "Blog"] " "
-    [:span "GitHub"] " "
-    [:span "LinkedIn"] " "
-    [:span "info@solsort.com"] " "
-    [:span "+45 60703081"] " "]
-   [:br]
-   [:hr] 
+    [:span "+45 60703081"] " \u00a0 " 
+    [:a {:href "mailto:hi@solsort.com?Subject=Hi"} "hi@solsort.com"] " "
+    
+    ]
+   [:div
+    [:a {:href "https://github.com/rasmuserik"} "GitHub"] " "
+    [:a {:href "https://linkedin.com/in/rasmuserik"} "LinkedIn"] " "
+    ]]
    ; TODO: should be :entries,:posts subscription instead of db
    [:div.apps
     (into [:div ] (map entry (:entries @db)))]
@@ -254,6 +235,6 @@
    
    ]
   )
-;(go (reagent/render-component (<! (main)) js/document.body))  
+
 (go (reagent/render-component [content] js/document.body))  
 
