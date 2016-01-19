@@ -217,9 +217,10 @@
    [:div.info
     [:h2 "Rasmus Erik Voel Jensen" ]
    [:h1 "solsort.com ApS"]
-   [:div "HTML5 web/widgets/apps"]
+   [:div [:strong "HTML5 web/widgets/apps"]]
+   [:div "Writing code, creating things, solving problems"]
    [:div
-    [:span "+45 60703081"] " \u00a0 " 
+    [:span "+45 60703081"] " " 
     [:a {:href "mailto:hi@solsort.com?Subject=Hi"} "hi@solsort.com"] " "
     
     ]
