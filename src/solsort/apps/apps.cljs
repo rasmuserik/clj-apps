@@ -47,13 +47,24 @@
      :posts []
      }))
 
-;; # defn db-changes
+;; # db-changes
+(defn update-route []
+  (swap! db assoc :route
+         (string/split (.slice js/location.hash 1) #"[/:]")))
 (defn update-entry [o]
   (swap! db assoc :entries 
          (map
            (fn [entry] (if (= (:id entry) (:id o)) o entry))
            (:entries @db))))
+;; # Events
+(defn set-route [& route]
+  (fn [] (aset js/location "hash" (string/join ":" route))))
+(defn hide-elem [event]
+  (aset (-> event .-target .-style) "display" "none"))
 ;; # Initialisation
+(defonce initialisation
+  (do
+    (.initializeTouchEvents js/React true)
 ;; ## Blog posts
 (defn <simple-xhr [url]
   (let [c (chan)
@@ -117,6 +128,13 @@
                  )
                )))
     ))
+
+;; ## Routing
+(aset js/window "onhashchange" update-route)
+(update-route)
+;; ## /Initialisation
+true
+))
 ;; # Styling
 (load-style! normalize-css "style-reset")
 (def entry-size 66)
@@ -127,15 +145,28 @@
   {:body
    {:background :white
     :font-family :sans-serif}
+
    :.info 
    {:text-align :center
     :margin "60px 0 60px 0" }
+
    "h1"
    {:font-weight :normal}
+
    :a 
    {:text-decoration :none
-    :color "#00a"
-    }
+    :color "#00a"}
+
+   ".date"
+   {:opacity "0.4"
+    :font-size "80%"
+    :font-weight :normal}
+
+   :.nobr {:white-space :nowrap}
+
+   :.clear
+   {:clear :both}
+
    :.solsort-entry
    {:position :relative
     :display :inline-block
@@ -176,33 +207,82 @@
     :padding-bottom (* 0.5 box-margin)
     :overflow "hidden"
     }
-   ".date"
-   {:opacity "0.4"
-    :font-size "80%"
-    :font-weight :normal}
    ".solsort-entry img"
    {:width entry-size
     :height entry-size
     :border-radius box-margin
     }
-   :.nobr {:white-space :nowrap}
+
+   :.overlay
+   {:position :absolute
+    :top 0
+    :left 0
+    :width "100%"
+    :min-height "100%"
+    :text-align :center
+    }
+   ".overlay .app"
+   { :display :inline-block
+    :padding 20
+    :margin-top 20
+    :text-align :left
+    :box-shadow "4px 4px 12px rgba(0,0,0,0.5)"
+    :background "rgba(255,250,240,0.95)" }
+   ".overlay .app .icon"
+   {:width (* 2 entry-size)
+    :height (* 2 entry-size)
+    :border-radius  (* 2 box-margin)
+    :float "left"
+    :text-align :left }
+   :.device
+   {:transform "scale(0.6)"
+    :background :black
+    :display :inline-block
+    :border-radius 10
+    :padding "15px 15px 30px 15px"
+    :box-shadow 
+    "inset 4px 4px 4px white,
+     inset -2px -2px 2px white,
+     3px 3px 12px rgba(0,0,0,0.5) 
+    "
+    }
+   :iframe.landscape
+   {:width 480
+    :height 320
+    :border :none 
+    :outline "1px white"}
+
+   :iframe.portrait
+   {:width 320 
+    :height 480 
+    :border "1px solid #888"}
+
+   :.screenshot 
+   {:clear :both 
+    :max-height 300
+    :max-width 300
+    :margin-top 20
+    :box-shadow "4px 4px 12px rgba(0,0,0,0.5)"
+    }
    }
   "basic-style"
   )
 ;; #
-
+(log 'here)
 
 (defn render-date [date]
+  (let [date (or date "    -00")]
+    (log "date" date)
   [:div.date.nobr
    (nth months (js/parseInt (.slice date 5 7) 10))
-   " " (.slice date 0 4) ]
+   " " (.slice date 0 4) ])
 
   )
 (defn entry [o]
   (let [date (or (:date o) "    -00")]
     [:a.solsort-entry {
-                       ;:href (str "#app:" (:id o))
-                       :href (str "/" (:id o))
+                       :href (str "#app:" (:id o))
+                       :on-click (set-route "app" (:id o))
                        :title (:shortdescription o)}
      [:img.icon {:src (str (:id o) "/icon.png")}]
      (render-date date)
@@ -216,9 +296,39 @@
      (render-date date)
      [:div.text title]]))
 
+(defn app-overlay []
+  ;; TODO reactive route
+  (let [kind (first (:route @db))
+        id (second (:route @db)) 
+        o (first (filter #(= (:id %) id) (:entries @db))) 
+        o (or o {})
+        ]
+    (log "x" o)
+   [:div.overlay 
+     [:div.app
+      [:img.icon {:src (str id "/icon.png")}]
+      (render-date (:date o))
+      [:div.text (:title o)]
+      [:div.clear]
+      [:div.device
+        [:div.demo
+         [:iframe 
+         {:class (if (= "landscape" (:orientation o)) "landscape" "portrait")  
+                  :src (str id "/index.html") :width "100%" :height "100%"}]]]
+     [:div
+      [:img.screenshot{:src (str id "/screenshot1.jpg") :on-error hide-elem}]
+     [:img.screenshot{:src (str id "/screenshot1.png") :on-error hide-elem}]
+     " \u00a0 "
+     [:img.screenshot{:src (str id "/screenshot2.png") :on-error hide-elem   }]
+     [:img.screenshot{:src (str id "/screenshot2.jpg") :on-error hide-elem   }]]
+      
+      ]  
+   "overlay"])
+  )
 (defn content []
   (log @db)
-  [:div
+  [:div 
+    {:on-click (set-route "")}
    [:div.info
     [:h2 "Rasmus\u00a0Erik Voel\u00a0Jensen" ]
     [:h1 "solsort.com ApS"]
@@ -236,9 +346,9 @@
     (into [:div ] (map entry (:entries @db)))]
    [:div.blog
     (into [:div ] (map post (:posts @db))) ]
-
+    (if (second (:route @db)) [app-overlay] [:span])
    ]
   )
 
-(go (reagent/render-component [content] js/document.body))  
+(reagent/render-component [content] js/document.body)  
 

@@ -1,6 +1,6 @@
 (defproject solsort.apps/apps "0.0.1"
   :dependencies
-  [[org.clojure/clojure "1.8.0-RC2"]
+  [[org.clojure/clojure "1.8.0"]
    [org.clojure/clojurescript "1.7.170"]
    [org.clojure/core.async "0.2.374"]
    ;[cljsjs/pouchdb "3.5.0-1"]
