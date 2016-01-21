@@ -311,7 +311,7 @@ true
     :margin-top 20
     ;:box-shadow "4px 4px 12px rgba(0,0,0,0.5)"
     } }, "overlay-style")
-;; #
+;; # View
 (defn render-date [date]
   (let [date (or date "    -00")]
   [:div.date.nobr
