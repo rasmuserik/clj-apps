@@ -143,6 +143,7 @@ true
 (def weight :normal)
 (def overlay-inner-width (min 600 (- js/innerWidth 40)))
 (def max-screen (min overlay-inner-width (- js/innerHeight 40)))
+(def app-size 1.5)
 
 ;; ## Base style
 (load-style! 
@@ -229,37 +230,57 @@ true
     :min-height "100%"
     :text-align :center
     }
+   ".overlay p"
+   {:text-align :left}
    ".overlay .app"
-   { :display :inline-block
-    :padding 20
+   {:display :inline-block
+    :padding 10
     :margin-top 20
-    :text-align :left
+    :width max-screen
+    :text-align :center
     :box-shadow "4px 4px 12px rgba(0,0,0,0.5)"
-    :background "rgba(255,250,240,0.95)" }
+    :background "rgba(255,250,240,1)" 
+    
+    }
    ".overlay .app .icon"
-   {:width (* 2 entry-size)
-    :height (* 2 entry-size)
+   {:width 80
+    :height 80
     :border-radius  (* 2 box-margin)
-    :float "left"
+    :margin-right 20
+    :vertical-align :top
     :text-align :left }
+   :.title
+   {:text-align :left
+    :display "inline-block"}
+   ".overlay .app h1"
+   {:margin-top 0
+    :vertical-align :top}
 
+   "a.button" 
+   {:border "1px solid"
+    :display :inline-block
+    :border-radius 3
+    :padding "3px 5px 3px 5px"
+    :box-shadow "2px 2px 6px rgba(0,0,0,0.5)"
+    :margin "2px 8px 2px 0px"}
+   ;; ### demo-app
    :.demo
    {:background :white
     :box-shadow "0px 0px 2px white"}
 
    :.portrait-app
-   {:height (+ 45 (* 0.5 max-screen))
+   {:height (+ 45 (* 0.5 app-size max-screen))
     :text-align "center"}
    :.landscape-app
-   {:height (+ 45 (* 0.5 max-screen device-ratio))
+   {:height (+ 45 (* 0.5 app-size max-screen device-ratio))
     :text-align "center"}
 
    ".portrait-app div" 
-   {:height (* 0.5 max-screen)
-    :width (* 0.5 max-screen device-ratio) }
+   {:height (* 0.5 app-size max-screen)
+    :width (* 0.5 app-size max-screen device-ratio) }
    ".landscape-app div"
-   {:width (* 0.5 max-screen)
-    :height (* 0.5 max-screen device-ratio) }
+   {:width (* 0.5 app-size max-screen)
+    :height (* 0.5 app-size max-screen device-ratio) }
 
    :.device
    {:display :inline-block
@@ -278,17 +299,17 @@ true
             
             }
    ".landscape-app iframe"
-   {:height (* max-screen device-ratio)
-    :width max-screen }
+   {:height (* app-size max-screen device-ratio)
+    :width (* app-size max-screen) }
    ".portrait-app iframe"
-   {:width (* max-screen device-ratio)
-    :height max-screen }
+   {:width (* app-size max-screen device-ratio)
+    :height (* app-size max-screen) }
    :.screenshot 
    {:clear :both 
     :max-height (* 0.5 max-screen)
-    :max-width (* 0.5 max-screen)
+    :max-width (* 0.4 max-screen)
     :margin-top 20
-    :box-shadow "4px 4px 12px rgba(0,0,0,0.5)"
+    ;:box-shadow "4px 4px 12px rgba(0,0,0,0.5)"
     } }, "overlay-style")
 ;; #
 (defn render-date [date]
@@ -322,19 +343,29 @@ true
         id (second (:route @db)) 
         o (first (filter #(= (:id %) id) (:entries @db))) 
         o (or o {})
+        url (str "https://apps.solsort.com/" id)
         ]
     (log "x" o)
    [:div.overlay 
      [:div.app
-      [:img.icon {:src (str id "/icon.png")}]
+      [:a {:href url} [:img.icon {:src (str id "/icon.png")}]]
+      [:div.title
       (render-date (:date o))
-      [:div.text (:title o)]
+      [:h1 (:title o)]
+      [:p
+       [:a.button {:href url} "Try it"]
+       [:a.button {:href (str "https://github.com/" (:github o))} "Source code"]
+       
+       ]]
+      [:p (:shortdescription o)]
       [:div.clear]
       [:div {:class (if (= "portrait" (:orientation o)) "portrait-app" "landscape-app")}
       [:div.device
         [:div.demo
          [:iframe {:src (str id "/index.html") :width "100%" :height "100%"}]]]]
-     [:div
+      [:p (:description o)]
+      [:hr]
+     [:a {:href url}
       [:img.screenshot{:src (str id "/screenshot1.jpg") :on-error hide-elem}]
      [:img.screenshot{:src (str id "/screenshot1.png") :on-error hide-elem}]
      " \u00a0 "
