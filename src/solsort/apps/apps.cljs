@@ -141,6 +141,10 @@ true
 (def box-margin 14)
 (def font-size 11)
 (def weight :normal)
+(def overlay-inner-width (min 600 (- js/innerWidth 40)))
+(def max-screen (min overlay-inner-width (- js/innerHeight 40)))
+
+;; ## Base style
 (load-style! 
   {:body
    {:background :white
@@ -212,8 +216,12 @@ true
     :height entry-size
     :border-radius box-margin
     }
-
-   :.overlay
+}"basic-style"
+  )
+;; ## Overlay
+(def device-ratio (/ 1080 1920))
+(load-style! 
+  { :.overlay
    {:position :absolute
     :top 0
     :left 0
@@ -234,45 +242,57 @@ true
     :border-radius  (* 2 box-margin)
     :float "left"
     :text-align :left }
+
+   :.demo
+   {:background :white
+    :box-shadow "0px 0px 2px white"}
+
+   :.portrait-app
+   {:height (+ 45 (* 0.5 max-screen))
+    :text-align "center"}
+   :.landscape-app
+   {:height (+ 45 (* 0.5 max-screen device-ratio))
+    :text-align "center"}
+
+   ".portrait-app div" 
+   {:height (* 0.5 max-screen)
+    :width (* 0.5 max-screen device-ratio) }
+   ".landscape-app div"
+   {:width (* 0.5 max-screen)
+    :height (* 0.5 max-screen device-ratio) }
+
    :.device
-   {:transform "scale(0.6)"
+   {:display :inline-block
     :background :black
-    :display :inline-block
     :border-radius 10
     :padding "15px 15px 30px 15px"
     :box-shadow 
     "inset 4px 4px 4px white,
      inset -2px -2px 2px white,
-     3px 3px 12px rgba(0,0,0,0.5) 
-    "
-    }
-   :iframe.landscape
-   {:width 480
-    :height 320
-    :border :none 
-    :outline "1px white"}
+     3px 3px 12px rgba(0,0,0,0.5)"}
 
-   :iframe.portrait
-   {:width 320 
-    :height 480 
-    :border "1px solid #888"}
-
+   ".device iframe"
+   {:transform-origin "0 0"
+    :transform "scale(0.5)"
+    :border :none
+            
+            }
+   ".landscape-app iframe"
+   {:height (* max-screen device-ratio)
+    :width max-screen }
+   ".portrait-app iframe"
+   {:width (* max-screen device-ratio)
+    :height max-screen }
    :.screenshot 
    {:clear :both 
-    :max-height 300
-    :max-width 300
+    :max-height (* 0.5 max-screen)
+    :max-width (* 0.5 max-screen)
     :margin-top 20
     :box-shadow "4px 4px 12px rgba(0,0,0,0.5)"
-    }
-   }
-  "basic-style"
-  )
+    } }, "overlay-style")
 ;; #
-(log 'here)
-
 (defn render-date [date]
   (let [date (or date "    -00")]
-    (log "date" date)
   [:div.date.nobr
    (nth months (js/parseInt (.slice date 5 7) 10))
    " " (.slice date 0 4) ])
@@ -310,11 +330,10 @@ true
       (render-date (:date o))
       [:div.text (:title o)]
       [:div.clear]
+      [:div {:class (if (= "portrait" (:orientation o)) "portrait-app" "landscape-app")}
       [:div.device
         [:div.demo
-         [:iframe 
-         {:class (if (= "landscape" (:orientation o)) "landscape" "portrait")  
-                  :src (str id "/index.html") :width "100%" :height "100%"}]]]
+         [:iframe {:src (str id "/index.html") :width "100%" :height "100%"}]]]]
      [:div
       [:img.screenshot{:src (str id "/screenshot1.jpg") :on-error hide-elem}]
      [:img.screenshot{:src (str id "/screenshot1.png") :on-error hide-elem}]
