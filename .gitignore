@@ -6,6 +6,7 @@
 /bibapp
 /bibapp/
 /blobshot/
+/combigame/
 cordova.js
 cordova-js-src/
 cordova_plugins.js
@@ -13,6 +14,10 @@ cordova_plugins.js
 /figwheel_server.log
 /frie-sange/
 /html5book/
+/js1k-brownian/
+/js1k-rain/
+/js1k-sierpinsky/
+/julia4d/
 /kbh-parking/
 /lemon/
 /morse-code/
@@ -28,10 +33,15 @@ cordova_plugins.js
 /resources/public/art-quiz
 /resources/public/bibapp
 /resources/public/blobshot
+/resources/public/combigame
 /resources/public/dkcities
 /resources/public/frie-sange
 /resources/public/html5book
 /resources/public/index.js
+/resources/public/js1k-brownian
+/resources/public/js1k-rain
+/resources/public/js1k-sierpinsky
+/resources/public/julia4d
 /resources/public/kbh-parking
 /resources/public/lemon
 /resources/public/morse-code
