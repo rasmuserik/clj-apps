@@ -389,11 +389,20 @@ true
      [:a {:href "mailto:hi@solsort.com?Subject=Hi"} "hi@solsort.com"] " "]
     [:div
      [:a {:href "https://github.com/rasmuserik"} "GitHub"] " \u00A0 "
-     [:a {:href "https://linkedin.com/in/rasmuserik"} "LinkedIn"] " "]]
+     [:a {:href "https://linkedin.com/in/rasmuserik"} "LinkedIn"] " "]
+   ]
    [:hr]
    ; TODO: should be :entries,:posts subscription instead of db
    [:div.apps
-    (into [:div ] (map entry (:entries @db)))]
+    (into [:div ] (map entry (:entries @db)))
+    [:center
+     [:a.button {:href "https://github.com/rasmuserik/writings/blob/master/sprints.md#current"} "Sprint Log"]
+     #_[:a.button {:href "https://blog.solsort.com/rasmuserik"} "RasmusErik"]
+     #_[:a.button {:href "https://blog.solsort.com/3-day-sprint"} "Product: 3-day Sprint"]
+    
+    ]
+    
+    ]
    [:div.blog
     (into [:div ] (map post (:posts @db))) ]
     (if (second (:route @db)) [app-overlay] [:span])
