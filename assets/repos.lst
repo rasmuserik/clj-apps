@@ -1,11 +1,14 @@
 rasmuserik/apps
-rasmuserik/bibapp-cordova
+rasmuserik/mubackend
+rasmuserik/html5book
+rasmuserik/app-list
+rasmuserik/bibapp
 NewCircleMovement/lemon
 solsort/visualisering-af-relationer
-rasmuserik/single-touch-snake
 rasmuserik/sketch-note-draw
 rasmuserik/frie-sange
 rasmuserik/morse-code
+rasmuserik/single-touch-snake
 rasmuserik/kbh-parking
 OneTwo360/360-viewer
 rasmuserik/art-quiz
@@ -15,3 +18,8 @@ rasmuserik/dkcities
 rasmuserik/planetcute
 rasmuserik/timelog
 rasmuserik/notescore
+rasmuserik/combigame
+rasmuserik/julia4d
+rasmuserik/js1k-brownian
+rasmuserik/js1k-rain
+rasmuserik/js1k-sierpinsky

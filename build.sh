@@ -19,9 +19,9 @@ cp -a platforms/browser/www/cordova* .
 cp -a platforms/browser/www/cordova* resources/public/
 
 # Manifest file
-
-echo "CACHE MANIFEST" > index.appcache
-echo "# `date`" >> index.appcache
-find assets -type f >> index.appcache
-echo "index.js" >> index.appcache
-find */config.xml >> index.appcache
+#
+#echo "CACHE MANIFEST" > index.appcache
+#echo "# `date`" >> index.appcache
+#find assets -type f >> index.appcache
+#echo "index.js" >> index.appcache
+#find */config.xml >> index.appcache
