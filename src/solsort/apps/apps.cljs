@@ -388,9 +388,7 @@
     [:div
      [:a {:href "https://github.com/rasmuserik"} "GitHub"] " \u00A0 "
      [:a {:href "https://linkedin.com/in/rasmuserik"} "LinkedIn"] " "]
-    [:div {:style {:max-width 300 :display :inline-block}}
-     [:h1 "NO PHONE "]     
-     "- my phone number is temporarily unavailable, catch me on email instead. It should hopefully be up and running in the middle of next week."]
+    
     ]
    [:hr]
                                         ; TODO: should be :entries,:posts subscription instead of db

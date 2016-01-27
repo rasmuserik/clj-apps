@@ -49,10 +49,12 @@ cordova_plugins.js
 /resources/public/notescore
 /resources/public/out/
 /resources/public/planetcute
+/resources/public/serverside
 /resources/public/single-touch-snake
 /resources/public/sketch-note-draw
 /resources/public/timelog
 /resources/public/visualisering-af-relationer
+/serverside/
 /single-touch-snake/
 /sketch-note-draw/
 /target/
