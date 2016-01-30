@@ -15,3 +15,4 @@ Object.prototype.send = function() {};
 Object.prototype.header = function() {};
 Object.prototype.removeHeader = function() {};
 Object.prototype.parseFromString = function() {};
+window.onSolsortReady = function() {};

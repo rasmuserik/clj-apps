@@ -10,6 +10,7 @@
   (string/split
    " January February March April May June July August September October November December"
    #" "))
+(defn page-ready [] (js/setTimeout #((aget js/window "onSolsortReady")) 20))
 (defn log  [& args]
   (js/console.log  (clj->js args))
   (first args))
@@ -127,6 +128,7 @@
                                         ;(log entry title)
                      )
                    )))
+        (page-ready)
         ))
 
     ;; ## Routing
