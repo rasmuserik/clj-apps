@@ -14,6 +14,12 @@
 (defn log  [& args]
   (js/console.log  (clj->js args))
   (first args))
+(defn render [o]
+  (when-not (js/document.getElementById "main")
+    (js/document.body.appendChild 
+      (log (doto (js/document.createElement "div")
+        (aset "id" "main")))))
+ (reagent/render-component o  (js/document.getElementById "main")))
 ;; # xml-processing utilities
 (defn name->kw [o] (keyword (str (.-nodeName o))))
 (defn dom->clj [dom]
@@ -410,5 +416,5 @@
    ]
   )
 
-(reagent/render-component [content] js/document.body)  
+(render [content])
 
