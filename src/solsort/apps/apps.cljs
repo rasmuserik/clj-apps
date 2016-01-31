@@ -349,7 +349,7 @@
         id (second (:route @db)) 
         o (first (filter #(= (:id %) id) (:entries @db))) 
         o (or o {})
-        url (str "http://apps.solsort.com/" id)
+        url (str "https://apps.solsort.com/" id)
         ]
     (log "x" o)
     [:div.overlay 
