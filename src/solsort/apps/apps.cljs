@@ -1,7 +1,10 @@
 (ns solsort.apps.apps
   (:require-macros  [cljs.core.async.macros :refer  [go go-loop alt!]])
   (:require
-   [solsort.util :refer  [<ajax <seq<! js-seq normalize-css load-style! put!close! parse-json-or-nil]]
+   [solsort.util 
+    :refer  
+    [<ajax <seq<! js-seq normalize-css load-style! put!close! parse-json-or-nil log page-ready render
+     dom->clj]]
    [reagent.core :as reagent :refer  []]
    [clojure.string :as string :refer [replace split blank?]]
    [cljs.core.async :refer  [>! <! chan put! take! timeout close! pipe]]))
@@ -10,42 +13,6 @@
   (string/split
    " January February March April May June July August September October November December"
    #" "))
-(defn page-ready [] (js/setTimeout #((aget js/window "onSolsortReady")) 20))
-(defn log  [& args]
-  (js/console.log  (clj->js args))
-  (first args))
-(defn render [o]
-  (when-not (js/document.getElementById "main")
-    (js/document.body.appendChild 
-      (log (doto (js/document.createElement "div")
-        (aset "id" "main")))))
- (reagent/render-component o  (js/document.getElementById "main")))
-;; # xml-processing utilities
-(defn name->kw [o] (keyword (str (.-nodeName o))))
-(defn dom->clj [dom]
-  (case (.-nodeType dom)
-    ((.-DOCUMENT_NODE dom) (.-ELEMENT_NODE dom))
-    (let [tag (name->kw dom)
-          children (map dom->clj (js-seq (.-children dom)))
-          children (if (empty? children)
-                     (if (blank? (.-textContent dom))
-                       []
-                       [(str (.-textContent dom))])
-                     children)
-          attrs (into {} (map (fn [o] [(name->kw o) (.-textContent o)]))
-                      (js-seq (or (.-attributes dom) [])))]
-      {:tag tag
-       :attrs attrs
-       :children children})
-    (.-TEXT_NODE dom) (str (.-textContent dom))))
-
-(defn xml-find [p xml]
-  (if (p xml) xml (some #(xml-find p %) (:children xml))))
-(defn xml-find-child [p xml] (some #(xml-find p %) (:children xml)))
-(defn xml->sxml [xml] 
-  (if (:tag xml)
-    [(:tag xml) (:attrs xml) (map xml->sxml (:children xml))]
-    xml))
 
 ;; # Application state
 (defonce db 

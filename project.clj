@@ -5,7 +5,7 @@
    [org.clojure/core.async "0.2.374"]
    ;[cljsjs/pouchdb "3.5.0-1"]
    [cljsjs/showdown "0.4.0-1"]
-   [solsort/util "0.1.1-SNAPSHOT"]
+   [solsort/util "0.1.2-SNAPSHOT"]
    [reagent "0.5.1"]
    ;[re-frame "0.5.0"]
    ]
