@@ -20,6 +20,7 @@ cordova_plugins.js
 /julia4d/
 /kbh-parking/
 /lemon/
+/mobibl/
 /morse-code/
 /mubackend/
 /notescore/
@@ -44,6 +45,7 @@ cordova_plugins.js
 /resources/public/julia4d
 /resources/public/kbh-parking
 /resources/public/lemon
+/resources/public/mobibl
 /resources/public/morse-code
 /resources/public/mubackend
 /resources/public/notescore
