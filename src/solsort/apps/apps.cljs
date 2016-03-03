@@ -373,9 +373,7 @@
      [:a.button {:href "https://github.com/rasmuserik/writings/blob/master/sprints.md#current"} "Sprint Log"]
      #_[:a.button {:href "https://blog.solsort.com/rasmuserik"} "RasmusErik"]
      #_[:a.button {:href "https://blog.solsort.com/3-day-sprint"} "Product: 3-day Sprint"]
-     
      ]
-    
     ]
    [:div.blog
     (into [:div ] (map post (:posts @db))) ]
@@ -383,5 +381,12 @@
    ]
   )
 
-(render [content])
+(defn apps []
+  [:div.apps
+    (into [:div ] (map entry (:entries @db)))
+    [:center
+     [:a.button {:href "https://github.com/rasmuserik/writings/blob/master/sprints.md#current"} "Sprint Log"]
+     ]])
+
+(render [apps])
 
