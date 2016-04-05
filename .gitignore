@@ -12,6 +12,7 @@ cordova-js-src/
 cordova_plugins.js
 /dkcities/
 /figwheel_server.log
+/fmtools/
 /frie-sange/
 /html5book/
 /js1k-brownian/
@@ -36,6 +37,7 @@ cordova_plugins.js
 /resources/public/blobshot
 /resources/public/combigame
 /resources/public/dkcities
+/resources/public/fmtools
 /resources/public/frie-sange
 /resources/public/html5book
 /resources/public/index.js

@@ -23,6 +23,7 @@
 
 ;; # db-changes
 (defn update-route []
+  (log 'update-route)
   (swap! db assoc :route
          (string/split (.slice js/location.hash 1) #"[/:]")))
 (defn update-entry [o]
@@ -130,9 +131,6 @@
   {:text-align :center
    :margin "60px 0 60px 0" }
 
-  "h1"
-  {:font-weight :normal}
-
   :a 
   {:text-decoration :none
    :color "#00a"}
@@ -160,14 +158,14 @@
    :font-size font-size
    :font-weight weight
    }
-  ".apps" 
-  {:display "inline-block"
-   :vertical-align :top
-   :box-sizing :border-box
-   :border-right "1px solid #eee"
-   :text-align :right
-   :width "38%" 
-   }
+  ;".apps" 
+  ;{:display "inline-block"
+  ; :vertical-align :top
+  ; :box-sizing :border-box
+  ; :border-right "1px solid #eee"
+  ; :text-align :right
+  ; :width "38%" 
+  ; }
   ".blog" 
   {:display "inline-block"
    :vertical-align :top
@@ -318,7 +316,6 @@
         o (or o {})
         url (str "https://apps.solsort.com/" id)
         ]
-    (log "x" o)
     [:div.overlay 
      [:div.app
       [:a {:href url} [:img.icon {:src (str id "/icon.png")}]]
@@ -348,24 +345,24 @@
       ]  
      "overlay"])
   )
+
+(aset js/document.body "onclick" (set-route ""))
 (defn content []
   (log @db)
   [:div 
-   {:on-click (set-route "")}
-   [:div.info
-    [:h2 "Rasmus\u00a0Erik Voel\u00a0Jensen" ]
+   ;{:on-click (set-route "")}
+   #_[:div.info
     [:h1 "solsort.com ApS"]
-    [:div [:strong "HTML5 web/widgets/apps"]]
+    [:h2 "HTML5 web/widgets/apps"]
                                         ;[:div "Writing code, creating things, solving problems"]
     [:div
      [:span "+45\u00a060703081"] " \u00a0 " 
      [:a {:href "mailto:hi@solsort.com?Subject=Hi"} "hi@solsort.com"] " "]
-    [:div
+    #_[:div
      [:a {:href "https://github.com/rasmuserik"} "GitHub"] " \u00A0 "
      [:a {:href "https://linkedin.com/in/rasmuserik"} "LinkedIn"] " "]
     
     ]
-   [:hr]
                                         ; TODO: should be :entries,:posts subscription instead of db
    [:div.apps
     (into [:div ] (map entry (:entries @db)))
@@ -382,7 +379,10 @@
   )
 
 (defn apps []
-  [:div.apps
+  [content]
+  #_[:div.apps
+   
+    [:h1 "hello"]
     (into [:div ] (map entry (:entries @db)))
     [:center
      [:a.button {:href "https://github.com/rasmuserik/writings/blob/master/sprints.md#current"} "Sprint Log"]
