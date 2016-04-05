@@ -1,3 +1,4 @@
+git pull
 for REPOS in `cat assets/repos.lst`
 do
   DIR=`echo $REPOS | sed -e s/'.*\\/'//`
