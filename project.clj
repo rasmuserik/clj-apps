@@ -42,5 +42,5 @@
                 :main solsort.apps.apps
                 :externs ["externs.js"]
                 :optimizations :advanced
-                :pretty-print false}}]}
+                :pretty-print true}}]}
   :figwheel {:nrepl-port 7888})
