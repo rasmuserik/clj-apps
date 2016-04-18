@@ -2220,7 +2220,7 @@ g.call = function() {
     a = this;
     return a.l.w ? a.l.w() : a.l.call(null);
   }
-  var H = null, H = function(H, Y, ja, ea, oa, xa, la, pa, ka, ua, Wa, bb, ya, cb, Hc, hd, Jd, te, rf, Vg, gj, qm) {
+  var H = null, H = function(H, Y, ja, ea, oa, xa, la, pa, ka, ua, Wa, bb, ya, cb, Hc, hd, Id, te, rf, Vg, fj, qm) {
     switch(arguments.length) {
       case 1:
         return Ic.call(this, H);
@@ -2255,17 +2255,17 @@ g.call = function() {
       case 16:
         return h.call(this, H, Y, ja, ea, oa, xa, la, pa, ka, ua, Wa, bb, ya, cb, Hc, hd);
       case 17:
-        return f.call(this, H, Y, ja, ea, oa, xa, la, pa, ka, ua, Wa, bb, ya, cb, Hc, hd, Jd);
+        return f.call(this, H, Y, ja, ea, oa, xa, la, pa, ka, ua, Wa, bb, ya, cb, Hc, hd, Id);
       case 18:
-        return e.call(this, H, Y, ja, ea, oa, xa, la, pa, ka, ua, Wa, bb, ya, cb, Hc, hd, Jd, te);
+        return e.call(this, H, Y, ja, ea, oa, xa, la, pa, ka, ua, Wa, bb, ya, cb, Hc, hd, Id, te);
       case 19:
-        return d.call(this, H, Y, ja, ea, oa, xa, la, pa, ka, ua, Wa, bb, ya, cb, Hc, hd, Jd, te, rf);
+        return d.call(this, H, Y, ja, ea, oa, xa, la, pa, ka, ua, Wa, bb, ya, cb, Hc, hd, Id, te, rf);
       case 20:
-        return c.call(this, H, Y, ja, ea, oa, xa, la, pa, ka, ua, Wa, bb, ya, cb, Hc, hd, Jd, te, rf, Vg);
+        return c.call(this, H, Y, ja, ea, oa, xa, la, pa, ka, ua, Wa, bb, ya, cb, Hc, hd, Id, te, rf, Vg);
       case 21:
-        return b.call(this, H, Y, ja, ea, oa, xa, la, pa, ka, ua, Wa, bb, ya, cb, Hc, hd, Jd, te, rf, Vg, gj);
+        return b.call(this, H, Y, ja, ea, oa, xa, la, pa, ka, ua, Wa, bb, ya, cb, Hc, hd, Id, te, rf, Vg, fj);
       case 22:
-        return a.call(this, H, Y, ja, ea, oa, xa, la, pa, ka, ua, Wa, bb, ya, cb, Hc, hd, Jd, te, rf, Vg, gj, qm);
+        return a.call(this, H, Y, ja, ea, oa, xa, la, pa, ka, ua, Wa, bb, ya, cb, Hc, hd, Id, te, rf, Vg, fj, qm);
     }
     throw Error("Invalid arity: " + arguments.length);
   };
@@ -2365,7 +2365,7 @@ g.me = function(a, b, c, d, e, f, h, l, m, p, n, t, u, w, B, C, D, J, S, T, qa) 
 function fd(a, b) {
   return ga(a) ? new Hd(a, b) : null == a ? null : Wb(a, b);
 }
-function Id(a) {
+function Jd(a) {
   var b = null != a;
   return (b ? null != a ? a.o & 131072 || a.qe || (a.o ? 0 : A(Ub, a)) : A(Ub, a) : b) ? Vb(a) : null;
 }
@@ -4125,11 +4125,11 @@ function ef(a, b) {
 }
 function ff(a, b) {
   var c;
-  null != a ? null != a && (a.F & 4 || a.ie) ? (c = sb.h(nc, mc(a), b), c = oc(c), c = fd(c, Id(a))) : c = sb.h(zb, a, b) : c = sb.h(xd, P, b);
+  null != a ? null != a && (a.F & 4 || a.ie) ? (c = sb.h(nc, mc(a), b), c = oc(c), c = fd(c, Jd(a))) : c = sb.h(zb, a, b) : c = sb.h(xd, P, b);
   return c;
 }
 function gf(a, b, c) {
-  null != a && (a.F & 4 || a.ie) ? (b = ee(b, De, mc(a), c), b = oc(b), a = fd(b, Id(a))) : a = ee(b, xd, a, c);
+  null != a && (a.F & 4 || a.ie) ? (b = ee(b, De, mc(a), c), b = oc(b), a = fd(b, Jd(a))) : a = ee(b, xd, a, c);
   return a;
 }
 function hf(a, b) {
@@ -7035,7 +7035,7 @@ function Gg(a) {
 Hg;
 function Ig(a, b) {
   var c = Xd(M.f(a, gb));
-  return c ? (c = null != b ? b.o & 131072 || b.qe ? !0 : !1 : !1) ? null != Id(b) : c : c;
+  return c ? (c = null != b ? b.o & 131072 || b.qe ? !0 : !1 : !1) ? null != Jd(b) : c : c;
 }
 function Jg(a, b, c) {
   if (null == a) {
@@ -7043,7 +7043,7 @@ function Jg(a, b, c) {
   }
   if (Ig(c, a)) {
     hc(b, "^");
-    var d = Id(a);
+    var d = Jd(a);
     zf.h ? zf.h(d, b, c) : zf.call(null, d, b, c);
     hc(b, " ");
   }
@@ -7488,7 +7488,7 @@ null), gi = new z(null, "margin-top", "margin-top", 392161226), hi = new z(null,
 "on-click", "on-click", 1632826543), Ci = new z(null, "title", "title", 636505583), Di = new z(null, "headers", "headers", -835030129), Ei = new z(null, "center", "center", -748944368), Fi = new z(null, "shouldComponentUpdate", "shouldComponentUpdate", 1795750960), Gi = new K(null, "n", "n", -2092305744, null), Hi = new z(null, "div", "div", 1057191632), fb = new z(null, "readably", "readably", 1129599760), Ii = new K(null, "box", "box", -1123515375, null), Dg = new z(null, "more-marker", "more-marker", 
 -14717935), Ji = new z(null, "reagentRender", "reagentRender", -358306383), Ki = new z(null, "render", "render", -1408033454), Li = new z(null, ".landscape-app", ".landscape-app", -664493582), Mi = new z(null, "preference", "preference", -253426926), Ni = new K(null, "nil?", "nil?", 1612038930, null), Oi = new z(null, "reagent-render", "reagent-render", -985383853), Pi = new K(null, "val", "val", 1769233139, null), Qi = new z(null, "div.overlay", "div.overlay", 58496851), Ri = new K(null, "not", 
 "not", 1044554643, null), Si = new z(null, "result", "result", 1415092211), ib = new z(null, "print-length", "print-length", 1931866356), Ti = new z(null, "border-box", "border-box", 1278054804), Ui = new z(null, "opacity", "opacity", 397153780), Vi = new z(null, "id", "id", -1388402092), Wi = new z(null, "class", "class", -2030961996), Xi = new z(null, "catch-exception", "catch-exception", -1997306795), Yi = new z(null, "padding", "padding", 1660304693), Zi = new z(null, "auto-run", "auto-run", 
-1958400437), $i = new z(null, "cljsName", "cljsName", 999824949), aj = new z(null, "component-will-unmount", "component-will-unmount", -2058314698), bj = new z(null, "prev", "prev", -1597069226), cj = new z(null, "div.text", "div.text", 645060726), dj = new K(null, "buf-or-n", "buf-or-n", -1646815050, null), ej = new z(null, "continue-block", "continue-block", -1852047850), hj = new z(null, "a.post", "a.post", -406564970), ij = new z(null, "transform-origin", "transform-origin", -586167370), jj = 
+1958400437), $i = new z(null, "cljsName", "cljsName", 999824949), aj = new z(null, "component-will-unmount", "component-will-unmount", -2058314698), bj = new z(null, "prev", "prev", -1597069226), cj = new z(null, "div.text", "div.text", 645060726), dj = new K(null, "buf-or-n", "buf-or-n", -1646815050, null), gj = new z(null, "continue-block", "continue-block", -1852047850), hj = new z(null, "a.post", "a.post", -406564970), ij = new z(null, "transform-origin", "transform-origin", -586167370), jj = 
 new z(null, ".overlay", ".overlay", 839880791), kj = new K(null, "meta11697", "meta11697", -1263159049, null), lj = new z(null, "attrs", "attrs", -2090668713), mj = new z(null, "display-name", "display-name", 694513143), nj = new z(null, ".clear", ".clear", 124858167), oj = new z(null, "text-decoration", "text-decoration", 1836813207), pj = new z(null, "display", "display", 242065432), qj = new z(null, "position", "position", -2011731912), rj = new K(null, "ifn?", "ifn?", -2106461064, null), sj = 
 new z(null, "on-dispose", "on-dispose", 2105306360), tj = new K(null, "c", "c", -122660552, null), uj = new z(null, "both", "both", -393648840), vj = new z(null, "componentFunction", "componentFunction", 825866104), wj = new z(null, "div.clear", "div.clear", 1593273433), xj = new z(null, "div.apps", "div.apps", 1109249593), yj = new z(null, "tag", "tag", -1290361223), zj = new z(null, "padding-bottom", "padding-bottom", -1899795591), Aj = new z(null, "on-error", "on-error", 1728533530), Bj = new K(null, 
 "meta11551", "meta11551", -586749894, null), Cj = new K(null, "meta10289", "meta10289", -2094521094, null), Ie = new K(null, "quote", "quote", 1377916282, null), Dj = new z(null, "timeout", "timeout", -318625318), Ej = new z(null, "margin-right", "margin-right", 809689658), Fj = new z(null, "h1", "h1", -1896887462), He = new z(null, "arglists", "arglists", 1661989754), Gj = new z(null, "version", "version", 425292698), Hj = new z(null, "div.app", "div.app", -99849286), Ge = new K(null, "nil-iter", 
@@ -8319,7 +8319,7 @@ function ll(a) {
   if (y(b)) {
     return b;
   }
-  b = Id(a);
+  b = Jd(a);
   return Od(b) ? Zh.c(b) : null;
 }
 function ml(a) {
@@ -8528,7 +8528,7 @@ function Cl(a) {
 }
 function Dl(a) {
   var b;
-  b = Id(a);
+  b = Jd(a);
   b = null == b ? null : Cl(b);
   return null == b ? Cl(Bd(a, 1)) : b;
 }
@@ -8589,7 +8589,7 @@ function Zk(a) {
                 d = l;
               }
               c = c ? 2 : 1;
-              y("input" === b || "textarea" === b) ? (e = Z, null == zl && (zl = ol(Bl)), a = fd(new X(null, 5, 5, e, [zl, a, b, d, c], null), Id(a)), a = Zk.c ? Zk.c(a) : Zk.call(null, a)) : (e = void 0, e = void 0, e = Id(a), e = null == e ? null : Cl(e), null != e && (d = null == d ? {} : d, d.key = e), e = d, a = Al.A ? Al.A(a, b, e, c) : Al.call(null, a, b, e, c));
+              y("input" === b || "textarea" === b) ? (e = Z, null == zl && (zl = ol(Bl)), a = fd(new X(null, 5, 5, e, [zl, a, b, d, c], null), Jd(a)), a = Zk.c ? Zk.c(a) : Zk.call(null, a)) : (e = void 0, e = void 0, e = Jd(a), e = null == e ? null : Cl(e), null != e && (d = null == d ? {} : d, d.key = e), e = d, a = Al.A ? Al.A(a, b, e, c) : Al.call(null, a, b, e, c));
               break a;
             }
             a = new X(null, 2, 5, Z, [c.substring(0, b), Dd.h(a, 0, c.substring(b + 1))], null);
@@ -8600,7 +8600,7 @@ function Zk(a) {
                 throw Error([F("Assert failed: "), F([F("Expected a function, not "), F(Ve.m(N([b], 0)))].join("")), F("\n"), F(Ve.m(N([Kc(rj, ik)], 0)))].join(""));
               }
               Gd(b) && null != b.type && "undefined" !== typeof console && console.warn([F("Warning: "), F("Using native React classes directly in Hiccup forms "), F("is not supported. Use create-element or "), F("adapt-react-class instead: "), F(b.type), F($k())].join(""));
-              c = Id(b);
+              c = Jd(b);
               c = Dd.h(c, Oi, b);
               c = ol(c).cljsReactClass;
               b.cljsReactClass = c;
@@ -10667,7 +10667,7 @@ function bp(a) {
         break;
       }
       if (nb(e) && nb(Xh.c(b))) {
-        a[1] = ej.c(b);
+        a[1] = gj.c(b);
         a[4] = bj.c(b);
         break;
       }
@@ -11105,7 +11105,7 @@ if ("undefined" === typeof Ep) {
                   }(p, m, p, c, a);
                 }(), t = W.f(n, p), u = Ze.A(zp, Dd, Ph, t), d = function() {
                   return function(a, b, c, d, e, f, h, l) {
-                    return function fj(m) {
+                    return function ej(m) {
                       return new ve(null, function(a, b, c, d, e, f, h, l) {
                         return function() {
                           for (;;) {
@@ -11206,7 +11206,7 @@ if ("undefined" === typeof Ep) {
                                       return !0;
                                     }
                                   }
-                                }() ? ze(w.ta(), fj(vc(p))) : ze(w.ta(), null);
+                                }() ? ze(w.ta(), ej(vc(p))) : ze(w.ta(), null);
                               }
                               var B = O(p);
                               return U(function() {
@@ -11291,7 +11291,7 @@ if ("undefined" === typeof Ep) {
                                   };
                                 }(m, B, p, n, a, b, c, d, e, f, h, l));
                                 return m;
-                              }(), fj(Uc(p)));
+                              }(), ej(Uc(p)));
                             }
                             return null;
                           }
@@ -11360,8 +11360,7 @@ function Op() {
 document.body.onclick = Cp(N([""], 0));
 function Pp() {
   vp(N([R.c ? R.c(zp) : R.call(null, zp)], 0));
-  return new X(null, 4, 5, Z, [Hi, new X(null, 3, 5, Z, [xj, ff(new X(null, 1, 5, Z, [Hi], null), W.f(Mp, Ph.c(R.c ? R.c(zp) : R.call(null, zp)))), new X(null, 2, 5, Z, [Ei, new X(null, 3, 5, Z, [ui, new r(null, 1, [Vj, "https://github.com/rasmuserik/writings/blob/master/sprints.md#current"], null), "Sprint Log"], null)], null)], null), new X(null, 2, 5, Z, [Qh, ff(new X(null, 1, 5, Z, [Hi], null), W.f(Np, Pj.c(R.c ? R.c(zp) : R.call(null, zp))))], null), y(wd(si.c(R.c ? R.c(zp) : R.call(null, zp)))) ? 
-  new X(null, 1, 5, Z, [Op], null) : new X(null, 1, 5, Z, [fk], null)], null);
+  return new X(null, 4, 5, Z, [Hi, new X(null, 3, 5, Z, [xj, ff(new X(null, 1, 5, Z, [Hi], null), W.f(Mp, Ph.c(R.c ? R.c(zp) : R.call(null, zp)))), new X(null, 1, 5, Z, [Ei], null)], null), new X(null, 2, 5, Z, [Qh, ff(new X(null, 1, 5, Z, [Hi], null), W.f(Np, Pj.c(R.c ? R.c(zp) : R.call(null, zp))))], null), y(wd(si.c(R.c ? R.c(zp) : R.call(null, zp)))) ? new X(null, 1, 5, Z, [Op], null) : new X(null, 1, 5, Z, [fk], null)], null);
 }
 var Qp = new X(null, 1, 5, Z, [function() {
   return new X(null, 1, 5, Z, [Pp], null);
