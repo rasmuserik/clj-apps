@@ -1,11 +1,12 @@
 (ns solsort.apps.apps
   (:require-macros  [cljs.core.async.macros :refer  [go go-loop alt!]])
   (:require
-   [solsort.util 
-    :refer  
+   [solsort.util
+    :refer
     [<ajax <seq<! js-seq normalize-css load-style! put!close! parse-json-or-nil log page-ready render
      dom->clj]]
    [reagent.core :as reagent :refer  []]
+   [clojure.walk :refer [keywordize-keys]]
    [clojure.string :as string :refer [replace split blank?]]
    [cljs.core.async :refer  [>! <! chan put! take! timeout close! pipe]]))
 ;; # Utility functions
@@ -15,8 +16,8 @@
    #" "))
 
 ;; # Application state
-(defonce db 
-  (reagent/atom 
+(defonce db
+  (reagent/atom
    {:entries []
     :posts []
     }))
@@ -27,7 +28,7 @@
   (swap! db assoc :route
          (string/split (.slice js/location.hash 1) #"[/:]")))
 (defn update-entry [o]
-  (swap! db assoc :entries 
+  (swap! db assoc :entries
          (map
           (fn [entry] (if (= (:id entry) (:id o)) o entry))
           (:entries @db))))
@@ -36,6 +37,42 @@
   (fn [] (aset js/location "hash" (string/join ":" route))))
 (defn hide-elem [event]
   (aset (-> event .-target .-style) "display" "none"))
+;; # Get project list
+(defonce git-url
+  "https://api.github.com/repos/rasmuserik/whale/contents/projects.lst")
+#_(go
+  (let [projects (->> (<! (<ajax git-url :credentials false))
+                     (keywordize-keys)
+                     (:content)
+                     (js/atob)
+                     (clojure.string/split-lines)
+                     (map #(split % #" "))
+                     (map (fn [[date type & args]]
+                            (merge
+                              {:date date
+                               :year (.slice date 0 4)
+                               :month (js/parseInt (.slice date 5) 10)
+                               :type type }
+                              (case type
+                              "git"
+                              (let [name (first args)
+                                    user (or (second args) "solsort")]
+                                {:name name
+                                 :repos (str name "/" user)
+                                 :url (str "https://" name ".solsort.com/")
+                                 })
+                              "web"
+                              {:name (first args)
+                               :url (str "https://" (first args) "/")}
+                              ))
+
+                            ))
+                     (map #(assoc % :icon (str (:url %) "icon.png")))
+                     )
+        ]
+  (log 'project-list
+       projects
+       )))
 ;; # Initialisation
 (defonce initialisation
   (do
@@ -44,7 +81,7 @@
     (defn <simple-xhr [url]
       (let [c (chan)
             xhr (js/XMLHttpRequest.)]
-        (aset xhr "onreadystatechange" 
+        (aset xhr "onreadystatechange"
               (fn [a]
                 (when (= 4 (aget xhr "readyState"))
                   (put!close! c (aget xhr "responseText")))))
@@ -54,7 +91,7 @@
     (go
       (swap! db assoc :posts [])
       (loop [i 1]
-        (let 
+        (let
             [posts (<! (<simple-xhr (str "https://blog.solsort.com/wp-json/wp/v2/posts?page=" i)))
              posts (parse-json-or-nil posts)]
           (when (< 0 (.-length posts))
@@ -67,10 +104,10 @@
         (:tag o)))
 
     (go
-      (let 
+      (let
           [entries(<! (<ajax "assets/repos.lst" :result "text"))
            entries (split entries "\n")
-           entries (map 
+           entries (map
                     (fn [repo]
                       (let [id (replace repo #".*/" "")]
                         {:id id
@@ -84,19 +121,19 @@
                          config-xml (<! (<ajax (str "/" id "/config.xml") :result "text"))
                          config-dom (.parseFromString  (js/DOMParser.) config-xml "application/xml")
                          config (dom->clj config-dom)
-                         widget (first (:children config))   
+                         widget (first (:children config))
                          config-elems (into {} (map (fn [e] [(conf-id e) e]) (:children widget)))
                          ]
 
                      (update-entry
                       (into entry
-                            {:title (first (:children (:name config-elems)))   
-                             :date (first (:children (:date config-elems)))   
+                            {:title (first (:children (:name config-elems)))
+                             :date (first (:children (:date config-elems)))
                              :name (:id (:attrs widget))
                              :version (:version (:attrs widget))
-                             :orientation (:value (:attrs (get config-elems "orientation"))) 
+                             :orientation (:value (:attrs (get config-elems "orientation")))
                              :icon (str id "/"  (:src (:attrs (:icon config-elems))))
-                             :description (first (:children (:description config-elems)))  
+                             :description (first (:children (:description config-elems)))
                              :shortdescription (first (:children (:shortdescription config-elems)))   })
                       )
                                         ;(log entry title)
@@ -122,16 +159,16 @@
 (def app-size 1.5)
 
 ;; ## Base style
-(load-style! 
+(load-style!
  {:body
   {:background :white
    :font-family :sans-serif}
 
-  :.info 
+  :.info
   {:text-align :center
    :margin "60px 0 60px 0" }
 
-  :a 
+  :a
   {:text-decoration :none
    :color "#00a"}
 
@@ -158,20 +195,20 @@
    :font-size font-size
    :font-weight weight
    }
-  ;".apps" 
+  ;".apps"
   ;{:display "inline-block"
   ; :vertical-align :top
   ; :box-sizing :border-box
   ; :border-right "1px solid #eee"
   ; :text-align :right
-  ; :width "38%" 
+  ; :width "38%"
   ; }
-  ".blog" 
+  ".blog"
   {:display "inline-block"
    :vertical-align :top
    :box-sizing :border-box
    :text-align :left
-   :width "61%" 
+   :width "61%"
    }
   ".blog .post"
   {:display "inline-block"
@@ -192,7 +229,7 @@
   } "basic-style")
 ;; ## Overlay
 (def device-ratio (/ 1080 1920))
-(load-style! 
+(load-style!
  { :.overlay
   {:position :absolute
    :top 0
@@ -210,8 +247,8 @@
    :width max-screen
    :text-align :center
    :box-shadow "4px 4px 12px rgba(0,0,0,0.5)"
-   :background "rgba(255,250,240,1)" 
-   
+   :background "rgba(255,250,240,1)"
+
    }
   ".overlay .app .icon"
   {:width 80
@@ -227,7 +264,7 @@
   {:margin-top 0
    :vertical-align :top}
 
-  "a.button" 
+  "a.button"
   {:border "1px solid"
    :display :inline-block
    :border-radius 3
@@ -246,7 +283,7 @@
   {:height (+ 45 (* 0.5 app-size max-screen device-ratio))
    :text-align "center"}
 
-  ".portrait-app div" 
+  ".portrait-app div"
   {:height (* 0.5 app-size max-screen)
    :width (* 0.5 app-size max-screen device-ratio) }
   ".landscape-app div"
@@ -258,7 +295,7 @@
    :background :black
    :border-radius 10
    :padding "15px 15px 30px 15px"
-   :box-shadow 
+   :box-shadow
    "inset 4px 4px 4px white,
      inset -2px -2px 2px white,
      3px 3px 12px rgba(0,0,0,0.5)"}
@@ -267,7 +304,7 @@
   {:transform-origin "0 0"
    :transform "scale(0.5)"
    :border :none
-   
+
    }
   ".landscape-app iframe"
   {:height (* app-size max-screen device-ratio)
@@ -275,8 +312,8 @@
   ".portrait-app iframe"
   {:width (* app-size max-screen device-ratio)
    :height (* app-size max-screen) }
-  :.screenshot 
-  {:clear :both 
+  :.screenshot
+  {:clear :both
    :max-height (* 0.5 max-screen)
    :max-width (* 0.4 max-screen)
    :margin-top 20
@@ -292,9 +329,9 @@
   )
 (defn entry [o]
   (let [date (or (:date o) "    -00")]
-    [:a.solsort-entry {
-                       :href (str "#app:" (:id o))
-                       :on-click (set-route "app" (:id o))
+    [:a.solsort-entry {:href (str "/"  (:id o) "/")
+                      ; :href (str "#app:" (:id o))
+                      ; :on-click (set-route "app" (:id o))
                        :title (:shortdescription o)}
      [:img.icon {:src (str (:id o) "/icon.png")}]
      (render-date date)
@@ -303,7 +340,7 @@
 (defn post [o]
   (let [title  (aget (aget o "title") "rendered")
         date (aget o "date")
-        link (aget o "link")] 
+        link (aget o "link")]
     [:a.post {:href link}
      (render-date date)
      [:div.text title]]))
@@ -311,12 +348,12 @@
 (defn app-overlay []
   ;; TODO reactive route
   (let [kind (first (:route @db))
-        id (second (:route @db)) 
-        o (first (filter #(= (:id %) id) (:entries @db))) 
+        id (second (:route @db))
+        o (first (filter #(= (:id %) id) (:entries @db)))
         o (or o {})
         url (str "https://apps.solsort.com/" id)
         ]
-    [:div.overlay 
+    [:div.overlay
      [:div.app
       [:a {:href url} [:img.icon {:src (str id "/icon.png")}]]
       [:div.title
@@ -325,7 +362,7 @@
        [:p
         [:a.button {:href url} "Try it"]
         [:a.button {:href (str "https://github.com/" (:github o))} "Source code"]
-        
+
         ]]
       [:p (:shortdescription o)]
       [:div.clear]
@@ -341,27 +378,27 @@
        " \u00a0 "
        [:img.screenshot{:src (str id "/screenshot2.png") :on-error hide-elem   }]
        [:img.screenshot{:src (str id "/screenshot2.jpg") :on-error hide-elem   }]]
-      
-      ]  
+
+      ]
      "overlay"])
   )
 
 (aset js/document.body "onclick" (set-route ""))
 (defn content []
   (log @db)
-  [:div 
+  [:div
    ;{:on-click (set-route "")}
    #_[:div.info
     [:h1 "solsort.com ApS"]
     [:h2 "HTML5 web/widgets/apps"]
                                         ;[:div "Writing code, creating things, solving problems"]
     [:div
-     [:span "+45\u00a060703081"] " \u00a0 " 
+     [:span "+45\u00a060703081"] " \u00a0 "
      [:a {:href "mailto:hi@solsort.com?Subject=Hi"} "hi@solsort.com"] " "]
     #_[:div
      [:a {:href "https://github.com/rasmuserik"} "GitHub"] " \u00A0 "
      [:a {:href "https://linkedin.com/in/rasmuserik"} "LinkedIn"] " "]
-    
+
     ]
                                         ; TODO: should be :entries,:posts subscription instead of db
    [:div.apps
@@ -381,7 +418,7 @@
 (defn apps []
   [content]
   #_[:div.apps
-   
+
     [:h1 "hello"]
     (into [:div ] (map entry (:entries @db)))
     [:center
